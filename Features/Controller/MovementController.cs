@@ -12,7 +12,7 @@ public class MovementController : MonoBehaviour
         _speaker = speaker;
         _offset = offset;
         
-        Log.Debug($"[ObjectController] Init the controller");
+        Log.Debug($"[ObjectController] Controller initialized.");
     }
 
     private void Update()
@@ -28,7 +28,7 @@ public class MovementController : MonoBehaviour
         _player = null;
         _speaker = null;
         
-        Log.Debug($"[ObjectController] Destroy the controller");
+        Log.Debug($"[ObjectController] Controller destroyed");
     }
 
     private SchematicObject _schematicObject;

@@ -3,46 +3,46 @@ using System.Linq;
 using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 
+using Scp999.Interfaces;
+
 namespace Scp999.Features.Manager;
 public static class KeybindManager
 {
-    private static IEnumerable<SettingBase> _settings;
-    
-    public static void RegisterKeybindsForPlayer(Player player)
+	private readonly static Dictionary<Player, List<SettingBase>> _settings;
+
+    public static void RegisterKeybindsForPlayer(
+		Player player, 
+		HeaderSetting header, 
+		IEnumerable<IAbility> abilities)
     {
-        if (_settings is null)
-        {
-            var settings = new List<SettingBase>();
-            
-            var header = new HeaderSetting(
-                name: "Abilities of SCP-999",
-                hintDescription: "Abilities of SCP-999",
-                paddling: false
-            );
-            
-            settings.Add(header);
-            
-            foreach (var ability in AbilityManager.GetAbilities.OrderBy(r => r.KeyId))
-            {
-                var keybindSetting = new KeybindSetting(
-                    id: ability.KeyId,
-                    label: ability.Name,
-                    suggested: ability.KeyCode,
-                    hintDescription: ability.Description
-                    //header: header
-                );
+		List<SettingBase> settings =[header];
 
-                settings.Add(keybindSetting);
-            }
+		_settings.Add(player, []);
 
-            _settings = settings;
-        }
-        
-        SettingBase.Register(player, _settings);
+		foreach (IAbility ability in abilities)
+		{
+			KeybindSetting setting = new(
+				ability.KeyId,
+				ability.Name,
+				ability.KeyCode,
+				false,
+				false,
+				ability.Description
+			);
+
+			_settings[player].Add(setting);
+		}
+
+		SettingBase.Register(player, settings);
     }
 
     public static void UnregisterKeybindsForPlayer(Player player)
     {
-        SettingBase.Unregister(player, _settings);
+        SettingBase.Unregister(player, _settings[player]);
     }
+
+	static KeybindManager()
+	{
+		_settings =[];
+	}
 }
