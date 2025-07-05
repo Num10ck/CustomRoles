@@ -171,7 +171,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Features\AbilityRole.cs" />
+    <Compile Include="Features\Role.cs" />
     <Compile Include="Commands\MainCommand.cs" />
     <Compile Include="Commands\Subcommands\GiveCommand.cs" />
     <Compile Include="Commands\Subcommands\RemoveCommand.cs" />
